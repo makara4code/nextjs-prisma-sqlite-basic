@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+import Link from "next/link";
+import NextTopLoader from "nextjs-toploader";
+import { ThemeProvider } from "next-themes";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -23,11 +23,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.className}  antialiased`}>
+        <NextTopLoader showSpinner={false} />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <nav className="border-b ">
+            <div className="container mx-auto flex justify-between items-center  px-4 py-4">
+              <Link href="/" className="text-xl font-bold">
+                Blog CRUD App
+              </Link>
+              <ModeToggle />
+            </div>
+          </nav>
+          <main>{children}</main>
+          <Toaster position="top-center" />
+        </ThemeProvider>
       </body>
     </html>
   );
